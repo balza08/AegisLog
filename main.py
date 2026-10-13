@@ -13,25 +13,35 @@ Direct commands:       python3 aegislog.py info
 Only scan and analyze systems you own or are authorized to test.
 """
 
-import argparse
-import gzip
-import json
-import os
-import platform
-import re
-import shlex
-import shutil
-import socket
-import subprocess
-import sys
-import time
-from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor
-from dataclasses import asdict, dataclass
-from datetime import datetime, timedelta
-from getpass import getuser
-from typing import Optional
-from urllib.parse import unquote
+#Interfaccia da riga di comando 
+import argparse                      # info, ping, ports, logs, audit
+import shlex                         # lexical analysis
+
+#Sistema operativo e processi 
+import os                            # clear schermo, variabili d'ambiente, file, geteuid (root?)
+import platform                      # nome OS, kernel, architettura, versione Python
+import shutil                        # shutil.which(): controlla se un comando esiste (ss, ip, ...)
+import subprocess                    # esegue comandi esterni (ping, ss, ip, journalctl)
+import sys                           # sys.stdout.isatty(): decide se usare i colori
+from getpass import getuser          # nome dell'utente corrente
+
+#Rete e parallelismo 
+import socket                        # IP locale, connect_ex (scan porte), DNS, nomi dei servizi
+from concurrent.futures import ThreadPoolExecutor   # sonde sulle porte in parallelo
+
+#Lettura e parsing dei log 
+import gzip                          # legge i log compressi (.gz)
+import re                            # regex: estrae IP, utenti, date e riconosce gli attacchi
+from urllib.parse import unquote     # decodifica gli URL (%2e%2e -> ..), anche il double encoding
+
+#Tempo e date
+import time                          # time.time() per misurare la scansione, sleep() nel menu
+from datetime import datetime, timedelta   # date dei log, finestra scorrevole, correzione anno
+
+#Strutture dati e salvataggio risultati
+import json                          # esporta i report in JSON
+from collections import defaultdict  # dizionario che crea da solo i valori mancanti
+from dataclasses import asdict, dataclass   # classe Finding e conversione in dizionario
 
 VERSION = "1.0"
 
