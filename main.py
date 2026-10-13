@@ -56,9 +56,7 @@ ________  _______   ___  ________  ___  ________
                                            \|_________|
 """
 
-# --------------------------------------------------------------------------- #
-# Terminal styling (zero dependencies)
-# --------------------------------------------------------------------------- #
+# Set di colori per terminale --> in base al supporto del terminale
 class C:
     on = sys.stdout.isatty() and not os.environ.get("NO_COLOR")
 
@@ -126,10 +124,7 @@ def ask(prompt, default=""):
 def pause():
     input(C.dim("\nPress ENTER to return to the menu..."))
 
-
-# --------------------------------------------------------------------------- #
 # Helpers
-# --------------------------------------------------------------------------- #
 def run(cmd, timeout=5):
     """Run a command, return (returncode, stdout). (-1, '') if unavailable."""
     try:
@@ -164,10 +159,7 @@ def offer_save(data):
         default = f"aegislog_report_{datetime.now():%Y%m%d_%H%M%S}.json"
         save_json(data, ask("File name", default))
 
-
-# --------------------------------------------------------------------------- #
-# 1. SYSTEM & NETWORK INFO
-# --------------------------------------------------------------------------- #
+# 1. SYSTEM & NETWORK INFO --> per ora solo locale --> prende dal tuo OS
 def get_interfaces():
     ifaces = []
     base = "/sys/class/net"
@@ -225,10 +217,7 @@ def show_system_info(header=True):
             print(f"  {i['name'].ljust(14)}{state}{(i['mac'] or '-').ljust(20)}{', '.join(i['addrs']) or '-'}")
     return info
 
-
-# --------------------------------------------------------------------------- #
 # 2. CONNECTIVITY TEST
-# --------------------------------------------------------------------------- #
 def ping_test(host="8.8.8.8", count=3):
     section(f"Connectivity test -> {host}")
     flag = "-n" if platform.system().lower() == "windows" else "-c"
@@ -263,10 +252,7 @@ def ping_test(host="8.8.8.8", count=3):
         bad(f"{host} is unreachable")
     return result
 
-
-# --------------------------------------------------------------------------- #
 # 3. PORT SCANNER + LISTENING SERVICES
-# --------------------------------------------------------------------------- #
 COMMON_PORTS = {
     21: "FTP", 22: "SSH", 23: "Telnet", 25: "SMTP", 53: "DNS", 80: "HTTP",
     110: "POP3", 143: "IMAP", 443: "HTTPS", 445: "SMB", 3306: "MySQL",
@@ -413,10 +399,7 @@ def cmd_ports(target="127.0.0.1", spec="common", timeout=0.5):
                 print(C.dim("\n  Tip: run with sudo to see the process name of every socket."))
     return result
 
-
-# --------------------------------------------------------------------------- #
 # 4. LOG ANALYZER
-# --------------------------------------------------------------------------- #
 SSH_FAIL = re.compile(r"Failed \w+ for (?:invalid user )?(?P<user>\S+) from (?P<ip>[\da-fA-F:.]+)")
 SSH_OK = re.compile(r"Accepted \w+ for (?P<user>\S+) from (?P<ip>[\da-fA-F:.]+)")
 
@@ -669,10 +652,7 @@ def cmd_logs(sources=None, window=300, threshold=5, year=None):
     render_findings(findings)
     return {"findings": [asdict(f) for f in findings], "stats": stats}
 
-
-# --------------------------------------------------------------------------- #
 # 5. FULL SECURITY AUDIT (ports x logs correlation)
-# --------------------------------------------------------------------------- #
 def security_score(findings, services):
     penalty_by_sev = {"CRITICAL": (30, 60), "HIGH": (8, 40), "MEDIUM": (3, 15), "LOW": (1, 5)}
     score = 100
@@ -755,10 +735,7 @@ def cmd_audit():
     report["score"], report["grade"], report["recommendations"] = score, letter, [t for _, t in recs]
     return report
 
-
-# --------------------------------------------------------------------------- #
 # MENU + CLI
-# --------------------------------------------------------------------------- #
 def menu():
     while True:
         clear_screen()
