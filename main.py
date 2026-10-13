@@ -418,7 +418,8 @@ ATTACK_PATTERNS = {
     "XSS": re.compile(r"(<script|onerror\s*=|onload\s*=|javascript:)", re.I),
     "Command injection": re.compile(r"((;|\|\||&&|\|)\s*(cat|ls|id|whoami|wget|curl|nc|bash)\b|/bin/(ba)?sh)", re.I),
 }
-#Riconosce il tool con il quale è stato fatto l'attacco 
+
+#Riconosce il tool con il quale è stato fatto l'attacco
 SCANNER_UA = re.compile(
     r"sqlmap|nikto|gobuster|dirbuster|wfuzz|ffuf|nmap|masscan|hydra|zgrab|nuclei|wpscan|acunetix|nessus", re.I)
 LOGIN_PATH = re.compile(r"(login|signin|wp-login|xmlrpc|admin|auth)", re.I)
