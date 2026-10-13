@@ -399,7 +399,7 @@ def cmd_ports(target="127.0.0.1", spec="common", timeout=0.5):
                 print(C.dim("\n  Tip: run with sudo to see the process name of every socket."))
     return result
 
-# 4. LOG ANALYZER
+# 4. LOG  --> percorso file / journal SSH  
 SSH_FAIL = re.compile(r"Failed \w+ for (?:invalid user )?(?P<user>\S+) from (?P<ip>[\da-fA-F:.]+)")
 SSH_OK = re.compile(r"Accepted \w+ for (?P<user>\S+) from (?P<ip>[\da-fA-F:.]+)")
 
@@ -418,6 +418,7 @@ ATTACK_PATTERNS = {
     "XSS": re.compile(r"(<script|onerror\s*=|onload\s*=|javascript:)", re.I),
     "Command injection": re.compile(r"((;|\|\||&&|\|)\s*(cat|ls|id|whoami|wget|curl|nc|bash)\b|/bin/(ba)?sh)", re.I),
 }
+#Riconosce il tool con il quale è stato fatto l'attacco 
 SCANNER_UA = re.compile(
     r"sqlmap|nikto|gobuster|dirbuster|wfuzz|ffuf|nmap|masscan|hydra|zgrab|nuclei|wpscan|acunetix|nessus", re.I)
 LOGIN_PATH = re.compile(r"(login|signin|wp-login|xmlrpc|admin|auth)", re.I)
