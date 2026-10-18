@@ -112,8 +112,7 @@ class C:
     def dim(cls, t):
         return cls.c(cls.CODES["dim"], t)
 
-
-GRADIENT = ["38;5;51", "38;5;45", "38;5;39", "38;5;33", "38;5;27", "38;5;21"]
+GRADIENT = ["38;5;51", "38;5;45", "38;5;39", "38;5;33", "38;5;27", "38;5;21", "38;5;57", "38;5;93"]
 WIDTH = 64
 
 
@@ -126,7 +125,8 @@ def banner():
     for i, ln in enumerate(lines):
         idx = i * len(GRADIENT) // len(lines)
         print(C.c(GRADIENT[idx], ln))
-    ...
+    print(C.bold(C.cyan("   AEGISLOG")) + C.dim(f"  ·  Network & Log Defense Toolkit  ·  v{VERSION}"))
+    print(C.dim("   For authorized use only"))
 
 def section(title):
     print("\n" + C.cyan("┌─[ ") + C.bold(title) + C.cyan(" ]" + "─" * max(2, WIDTH - len(title) - 6)))
@@ -881,4 +881,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    
