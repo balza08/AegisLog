@@ -59,22 +59,58 @@ BANNER = r"""
  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀ 
 """
 
-# Set di colori per terminale --> in base al supporto del terminale
+# Colori per terminale: si attivano solo se il terminale li supporta
 class C:
     on = sys.stdout.isatty() and not os.environ.get("NO_COLOR")
 
-    @staticmethod
-    def c(code, text):
-        return f"\033[{code}m{text}\033[0m" if C.on else str(text)
+    # Codici ANSI (versioni brillanti)
+    CODES = {
+        "red": "91",
+        "green": "92",
+        "yellow": "93",
+        "blue": "94",
+        "cyan": "96",
+        "bold": "1",
+        "dim": "2",
+    }
 
-    red = staticmethod(lambda t: C.c("91", t))
-    green = staticmethod(lambda t: C.c("92", t))
-    yellow = staticmethod(lambda t: C.c("93", t))
-    blue = staticmethod(lambda t: C.c("94", t))
-    magenta = staticmethod(lambda t: C.c("95", t))
-    cyan = staticmethod(lambda t: C.c("96", t))
-    bold = staticmethod(lambda t: C.c("1", t))
-    dim = staticmethod(lambda t: C.c("2", t))
+    @classmethod
+    def c(cls, code, text):
+        """Colora un testo con un codice ANSI (es. "96" o "38;5;45")."""
+        return f"\033[{code}m{text}\033[0m" if cls.on else str(text)
+
+    @classmethod
+    def disable(cls):
+        """Disattiva i colori (usato da --no-color)."""
+        cls.on = False
+
+    @classmethod
+    def red(cls, t):
+        return cls.c(cls.CODES["red"], t)
+
+    @classmethod
+    def green(cls, t):
+        return cls.c(cls.CODES["green"], t)
+
+    @classmethod
+    def yellow(cls, t):
+        return cls.c(cls.CODES["yellow"], t)
+
+    @classmethod
+    def blue(cls, t):
+        return cls.c(cls.CODES["blue"], t)
+
+    @classmethod
+    def cyan(cls, t):
+        return cls.c(cls.CODES["cyan"], t)
+
+    @classmethod
+    def bold(cls, t):
+        return cls.c(cls.CODES["bold"], t)
+
+    @classmethod
+    def dim(cls, t):
+        return cls.c(cls.CODES["dim"], t)
 
 
 GRADIENT = ["38;5;51", "38;5;45", "38;5;39", "38;5;33", "38;5;27", "38;5;21"]
@@ -845,3 +881,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
