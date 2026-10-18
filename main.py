@@ -77,7 +77,7 @@ class C:
     dim = staticmethod(lambda t: C.c("2", t))
 
 
-GRADIENT = ["96", "96", "36", "94", "94", "34", "35", "35"]
+GRADIENT = ["38;5;51", "38;5;45", "38;5;39", "38;5;33", "38;5;27", "38;5;21"]
 WIDTH = 64
 
 
@@ -85,14 +85,12 @@ def clear_screen():
     if sys.stdout.isatty():
         os.system("cls" if os.name == "nt" else "clear")
 
-
 def banner():
     lines = [ln for ln in BANNER.splitlines() if ln.strip()]
     for i, ln in enumerate(lines):
-        print(C.c(GRADIENT[i % len(GRADIENT)], ln))
-    print(C.bold(C.cyan("   AEGISLOG")) + C.dim(f"  ·  Network & Log Defense Toolkit  ·  v{VERSION}"))
-    print(C.dim("   For authorized use only"))
-
+        idx = i * len(GRADIENT) // len(lines)
+        print(C.c(GRADIENT[idx], ln))
+    ...
 
 def section(title):
     print("\n" + C.cyan("┌─[ ") + C.bold(title) + C.cyan(" ]" + "─" * max(2, WIDTH - len(title) - 6)))
