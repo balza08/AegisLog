@@ -12,6 +12,8 @@ Direct commands:       python3 aegislog.py info
 
 Only scan and analyze systems you own or are authorized to test.
 """
+#import per colori da terminal
+import sys                           # sys.stdout.isatty(): decide se usare i colori
 
 #Interfaccia da riga di comando 
 import argparse                      # info, ping, ports, logs, audit
@@ -59,24 +61,26 @@ BANNER = r"""
  ▀         ▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀▀ 
 """
 
-# Colori per terminale: si attivano solo se il terminale li supporta
+
 class C:
     on = sys.stdout.isatty() and not os.environ.get("NO_COLOR")
 
-    # Codici ANSI (versioni brillanti)
+    # Colori standard (30-37) invece dei "brillanti" (90-97):
+    # più scuri, meno aggressivi, e rispettano il tema del terminale
     CODES = {
-        "red": "91",
-        "green": "92",
-        "yellow": "93",
-        "blue": "94",
-        "cyan": "96",
+        "red": "31",
+        "green": "32",
+        "yellow": "33",
+        "blue": "34",
+        "cyan": "36",
+        "grey": "90",
         "bold": "1",
         "dim": "2",
     }
 
     @classmethod
     def c(cls, code, text):
-        """Colora un testo con un codice ANSI (es. "96" o "38;5;45")."""
+        """Colora un testo con un codice ANSI (es. "31" o "38;5;245")."""
         return f"\033[{code}m{text}\033[0m" if cls.on else str(text)
 
     @classmethod
@@ -105,6 +109,10 @@ class C:
         return cls.c(cls.CODES["cyan"], t)
 
     @classmethod
+    def grey(cls, t):
+        return cls.c(cls.CODES["grey"], t)
+
+    @classmethod
     def bold(cls, t):
         return cls.c(cls.CODES["bold"], t)
 
@@ -112,7 +120,23 @@ class C:
     def dim(cls, t):
         return cls.c(cls.CODES["dim"], t)
 
-GRADIENT = ["38;5;51", "38;5;45", "38;5;39", "38;5;33", "38;5;27", "38;5;21", "38;5;57", "38;5;93"]
+    @classmethod
+    def severity(cls, level, text):
+        """Colore per livello di gravità: il colore comunica, non decora."""
+        colors = {
+            "critical": "1;31",   # rosso bold
+            "high": "31",         # rosso
+            "medium": "33",       # giallo
+            "low": "36",          # ciano
+            "info": "90",         # grigio
+        }
+        return cls.c(colors.get(level.lower(), "0"), text)
+
+
+# Banner monocromatico: sfumature di grigio (scala 232-255 di xterm-256)
+# al posto del gradiente ciano -> viola
+GRADIENT = ["38;5;240", "38;5;243", "38;5;245", "38;5;247",
+            "38;5;249", "38;5;251", "38;5;253", "38;5;255"]
 WIDTH = 64
 
 
