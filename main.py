@@ -24,7 +24,6 @@ import os                            # clear schermo, variabili d'ambiente, file
 import platform                      # nome OS, kernel, architettura, versione Python
 import shutil                        # shutil.which(): controlla se un comando esiste (ss, ip, ...)
 import subprocess                    # esegue comandi esterni (ping, ss, ip, journalctl)
-import sys                           # sys.stdout.isatty(): decide se usare i colori
 from getpass import getuser          # nome dell'utente corrente
 
 #Rete e parallelismo 
